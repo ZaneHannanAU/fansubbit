@@ -21,6 +21,9 @@ const translate = module.exports = (
 			// adds back the text we just removed lol
 		)
 		// .then(console.log)
+		.then(e => {
+			console.log(e); return e
+		})
 		.then(text => fs.writeFile(
 			`${o.path}.${o.from}_${o.to}`,
 			text,
