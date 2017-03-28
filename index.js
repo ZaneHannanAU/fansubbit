@@ -30,7 +30,7 @@ function dosub(file, i) {
 			.then()
 			.then(text => translate(Object.assign({},
 				options,
-				{ text: data, it: i, filename: file }
+				{ text, it: i, filename: file }
 			)))
 			.catch(console.error)
 	} catch (e) {}
