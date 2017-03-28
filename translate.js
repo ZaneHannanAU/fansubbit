@@ -13,14 +13,15 @@ const translator = module.exports = (
 	var unsafeTranslate = []
 	var translate = o.text.replace(unsafe, (match, line) => {
 		unsafeTranslate.push(line)
+		const len = unsafeTranslate.length -1
 		console.log(
-			"Unsafe to translate:", unsafeTranslate[ unsafeTranslate.length-1 ]
+			"Unsafe to translate #%d: %s", len, unsafeTranslate[ len ]
 		);
 		return '\uFFFC'
 	}).split(/(?:\r?\n){2,}/g)
 	var translated = []
-	function writeFile(done) {
-		const fullyTranslated = done
+	function writeFile(a) {
+		const fullyTranslated = a
 			.join('\r\n\r\n')
 			.replace(/\uFFFC/g, () => unsafeTranslate.shift())
 		return fs.writeFile(
@@ -29,12 +30,15 @@ const translator = module.exports = (
 			'utf8',
 			err => {
 				if (err) throw err
-				else console.log('Saved %s;\r\n\r\n', `${o.filename}.${o.from}_${o.to}`, fullyTranslated);
+				else console.log(
+					'%s\r\n%s\r\n\r\nSaved above translated to %s;',
+					'==-='.repeat(25),
+					fullyTranslated,
+					`${o.filename}.${o.from}_${o.to}`
+				);
 			})
 	}
-	console.warn(`${ " "
-		// + JSON.stringify(unsafeTranslate.concat(translate), null, ' ')
-	}\r\nMaking ${translate.length} requests${
+	console.warn(`Making ${translate.length} requests${
 		translate.length > 10 ? ', hold TIGHT!' : '.'
 	}\r\n`);
 	var ntranslated = 0
